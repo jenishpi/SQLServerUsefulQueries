@@ -1,0 +1,15 @@
+-- One way of doing it: 
+DECLARE @Names VARCHAR(8000)  
+SELECT @Names = COALESCE(@Names + ', ', '') + COALESCE(MyCol, '') 
+FROM [MyTable] 
+WHERE MyCol IS NOT NULL 
+ 
+SELECT @Names 
+ 
+ 
+-- Better way of doing it: 
+SELECT (SELECT DISTINCT '' + MyCol + ';  ' FROM [MyTable] AS L FOR XML PATH('')) 
+ 
+ 
+-- Best way of doing it since MSSQL 2017 & Oracle & PostgresSQL: 
+SELECT string_agg(DISTINCT <column>,'delimiter') FROM <table> GROUP BY <column2> 

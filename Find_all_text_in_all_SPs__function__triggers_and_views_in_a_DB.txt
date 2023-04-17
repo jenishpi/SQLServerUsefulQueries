@@ -1,0 +1,28 @@
+SELECT DISTINCT
+       o.name AS Object_Name,
+       o.type_desc
+  FROM sys.sql_modules m
+       INNER JOIN
+       sys.objects o
+         ON m.object_id = o.object_id
+ WHERE m.definition Like '%[ABD]%';
+ GO
+
+DECLARE @SEARCHSTRING VARCHAR(255), @notcontain Varchar(255) 
+ 
+SELECT @SEARCHSTRING = 'MY SEARCH TERM HERE', @notcontain = 'NOT MY SEARCH TERM HERE' 
+ 
+SELECT DISTINCT sysobjects.name AS [Object Name] , 
+case when sysobjects.xtype = 'P' then 'Stored Proc' 
+when sysobjects.xtype = 'TF' then 'Function' 
+when sysobjects.xtype = 'TR' then 'Trigger' 
+when sysobjects.xtype = 'V' then 'View' 
+end as [Object Type], 
+s.definition 
+FROM sysobjects, sys.sql_modules s 
+WHERE sysobjects.ID = s.object_id 
+AND sysobjects.type in ('P','TF','TR','V') 
+AND sysobjects.category = 0 
+AND CHARINDEX(@SEARCHSTRING,s.definition)>0 
+AND ((CHARINDEX(@notcontain,s.definition)=0  
+or CHARINDEX(@notcontain,s.definition)<>0))

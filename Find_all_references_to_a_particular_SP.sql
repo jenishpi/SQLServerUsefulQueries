@@ -1,0 +1,3 @@
+SELECT Name, object_id 
+FROM sys.procedures 
+WHERE OBJECT_DEFINITION(OBJECT_ID) LIKE '%MY SEARCH TERM HERE%' 
