@@ -1,4 +1,4 @@
--- Author: Shiva Challa (http://challa.info) 
+-- Author
 USE MASTER 
 GO 
 BEGIN 
